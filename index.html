@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZONA DE DESCARGA DE JEFFERSON OFICIAL</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#000;color:#fff;overflow-x:hidden;}
+
+@keyframes rgbText{
+0%{color:red;}25%{color:blue;}50%{color:white;}75%{color:magenta;}100%{color:red;}
+}
+
+@keyframes rgbBorder{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* 🌠 METEORITOS */
+.meteor{
+position:fixed;
+top:-50px;
+width:3px;
+height:100px;
+background:linear-gradient(white, transparent);
+opacity:0.8;
+transform:rotate(45deg);
+animation:caer linear infinite;
+}
+
+@keyframes caer{
+0%{transform:translateY(0) translateX(0) rotate(45deg);}
+100%{transform:translateY(100vh) translateX(200px) rotate(45deg);}
+}
+
+.header{text-align:center;padding:20px;}
+.header h1{animation:rgbText 5s infinite linear;}
+
+.creador{text-align:center;margin:20px;}
+.creador img{
+width:90%;max-width:400px;border-radius:15px;padding:4px;
+background:linear-gradient(45deg, red, blue, white, magenta);
+background-size:300% 300%;animation:rgbBorder 4s linear infinite;
+}
+
+.creador p{animation:rgbText 5s infinite linear;font-weight:bold;}
+
+.search{
+padding:12px;width:90%;margin:10px auto;display:block;
+border-radius:10px;border:none;background:#111;color:#fff;
+}
+
+.container{padding:15px;}
+
+.card{
+background:#111;padding:15px;border-radius:15px;margin-bottom:15px;
+box-shadow:0 0 15px red;transition:0.3s;
+}
+.card:hover{transform:scale(1.03);box-shadow:0 0 35px red;}
+
+/* IMAGEN RGB */
+.img-rgb{
+padding:4px;border-radius:10px;
+background:linear-gradient(45deg, red, blue, white, magenta);
+background-size:300% 300%;
+animation:rgbBorder 4s linear infinite;
+margin-bottom:10px;
+}
+.img-rgb img{width:100%;border-radius:8px;}
+
+/* TEXTO */
+.nombre-rgb{
+animation:rgbText 4s infinite linear;
+text-align:center;
+}
+
+.fecha,.contador{
+text-align:center;
+font-size:14px;
+animation:rgbText 6s infinite linear;
+}
+
+/* BOTÓN */
+.btn{
+padding:12px;margin-top:10px;text-align:center;
+border-radius:10px;cursor:pointer;font-weight:bold;
+background:linear-gradient(45deg, red, blue, white, magenta);
+background-size:300% 300%;
+animation:rgbBorder 4s linear infinite;
+color:#000;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🌠 METEORITOS -->
+<div class="meteor" style="left:10%;animation-duration:3s;"></div>
+<div class="meteor" style="left:30%;animation-duration:5s;"></div>
+<div class="meteor" style="left:60%;animation-duration:4s;"></div>
+<div class="meteor" style="left:80%;animation-duration:6s;"></div>
+
+<div class="header">
+<h1>ZONA DE DESCARGA DE JEFFERSON OFICIAL</h1>
+</div>
+
+<div class="creador">
+<img src="https://i.imgur.com/UEqbiiw.png">
+<p>ALBERT OFICIAL CREADOR</p>
+</div>
+
+<input class="search" placeholder="Buscar..." onkeyup="buscar(this.value)">
+<div class="container" id="lista"></div>
+
+<script>
+
+/* 🔥 DATOS BASE (SIEMPRE CARGAN) */
+let baseArchivos = [
+{
+nombre:"ARCHIVO NO DISPONIBLE",
+link:"https:/",
+imagen:"https://i.imgur.com/UEqbiiw.png",
+fecha:"24/03/2026",
+descargas:0
+},
+{
+nombre:"ARCHIVO NO ENCONTRADO ",
+link:"https://example.com",
+imagen:"https://i.imgur.com/UEqbiiw.png",
+fecha:"O0/03/2026",
+descargas:0
+}
+];
+
+/* 🔥 CARGA SEGURA */
+let archivos = JSON.parse(localStorage.getItem("archivos"));
+
+if(!archivos || archivos.length === 0){
+archivos = baseArchivos;
+guardar();
+}
+
+/* GUARDAR */
+function guardar(){
+localStorage.setItem("archivos", JSON.stringify(archivos));
+}
+
+/* RENDER */
+function render(lista = archivos){
+let html="";
+lista.forEach((a,i)=>{
+html+=`
+<div class="card">
+
+<div class="img-rgb">
+<img src="${a.imagen}">
+</div>
+
+<h2 class="nombre-rgb">${a.nombre}</h2>
+<div class="fecha">📅 ${a.fecha}</div>
+<div class="contador">⬇️ ${a.descargas} descargas</div>
+
+<div class="btn" onclick="descargar(${i})">DESCARGAR</div>
+
+</div>`;
+});
+document.getElementById("lista").innerHTML = html;
+}
+render();
+
+/* DESCARGAR */
+function descargar(i){
+archivos[i].descargas++;
+guardar();
+render();
+window.location.href = archivos[i].link;
+}
+
+/* BUSCAR */
+function buscar(text){
+let filtrados = archivos.filter(a=>
+a.nombre.toLowerCase().includes(text.toLowerCase())
+);
+render(filtrados);
+}
+
+</script>
+
+</body>
+</html>
